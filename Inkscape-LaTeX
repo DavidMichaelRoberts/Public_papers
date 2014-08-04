@@ -1,0 +1,39 @@
+FILENAME := anafunctors2
+TEXFILE := $(FILENAME).tex
+PDF := $(FILENAME).pdf
+IMGDIR := ./images
+SVGS := $(wildcard $(IMGDIR)/*.svg)
+TIKZ := ${SVGS:.svg=.tex}
+
+
+all: $(PDF)
+	echo $(PDF)
+
+$(PDF): $(TEXFILE) $(TIKZ) $(SVGS)
+	echo $(PDF)
+	pdflatex $(FILENAME)
+	bibtex $(FILENAME)
+	pdflatex $(FILENAME)
+	pdflatex $(FILENAME)
+
+
+$(TEXFILE): $(TIKZ) $(SVGS)
+
+# The option --texmode tells the script to enclose text with $ $
+# The option --codeoutput "figonly" means output just the tikzpicture code
+
+
+$(TIKZ): $(SVGS)
+	echo $(PDF)
+	svg2tikz $< >$@ --texmode "math" --figonly
+
+clean:
+	$(RM) $(IMGDIR)/*.tex.bak
+	$(RM) $(IMGDIR)/*.aux
+	$(RM) $(IMGDIR)/*.log
+	$(RM) $(IMGDIR)/*.synctex.gz
+	$(RM) $(IMGDIR)/*.fdb_latexmk
+	$(RM) $(IMGDIR)/*.pdf
+	$(RM) *.aux
+	$(RM) *.log
+	$(RM) *.xyc
